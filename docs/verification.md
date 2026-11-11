@@ -20,6 +20,10 @@
   seis mods. Artefactos descargados y hashes comprobados.
 - Java `--dry-run` acepta el comando y carga la clase principal sin ejecutar el juego.
 - Exportación inicial local firmada; la clave privada se cifró con DPAPI fuera del repo.
+- Código publicado en `JdeOz/aea-launcher`. Versión preliminar `v0.1.0-preview.1` con
+  `Aea.exe` y `SHA256SUMS.txt`; el digest del ejecutable fue comprobado tras subirlo.
+- GitHub Actions verificó el commit de esa versión en un runner Windows independiente:
+  https://github.com/JdeOz/aea-launcher/actions/runs/43105765898
 
 ## Límites pendientes
 

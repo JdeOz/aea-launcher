@@ -19,4 +19,4 @@
 - [ ] T012 External acceptance: own approved app, real login and game (SC004; blocked externally).
 - [x] T013 Require active Java entitlement before accepting profile; regression for absent/unavailable license (FR004).
 - [x] T014 Normal game title screen; first-run server list only, no autojoin. Regression for existing lists and arguments (US1).
-- [ ] T015 Publish source and portable developer preview; disclose pending Minecraft approval and pack update channel (FR001, FR012).
+- [x] T015 Publish source and portable developer preview; disclose pending Minecraft approval and pack update channel (FR001, FR012).
