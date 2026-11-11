@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "packId": "aea-survival",
+  "version": "0.1.0",
+  "name": "Aea Survival",
+  "minecraft": "26.3",
+  "gameMetadata": {
+    "url": "https://piston-meta.mojang.com/v1/packages/9f67e10ed013deeaad20ac3c800652765d493408/26.3.json",
+    "path": "game.json",
+    "algorithm": "SHA1",
+    "hash": "9f67e10ed013deeaad20ac3c800652765d493408",
+    "size": 44992
+  },
+  "fabric": "0.20.1",
+  "fabricMetadata": {
+    "url": "https://meta.fabricmc.net/v2/versions/loader/26.3/0.20.1/profile/json",
+    "path": "fabric.json",
+    "algorithm": "SHA256",
+    "hash": "d4398cf497ce8a3b690439dd0f54bdd2f583a4621c543aca83cc13613206b0ed",
+    "size": 2778
+  },
+  "fabricLibraries": [
+    {
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar",
+      "path": "org/ow2/asm/asm/9.10.1/asm-9.10.1.jar",
+      "algorithm": "SHA256",
+      "hash": "ed825d10ab1399c8c0cb669e688cf0c8c82629b4c8399b58352b68e92ca10fcb",
+      "size": 126151
+    },
+    {
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm-analysis/9.10.1/asm-analysis-9.10.1.jar",
+      "path": "org/ow2/asm/asm-analysis/9.10.1/asm-analysis-9.10.1.jar",
+      "algorithm": "SHA256",
+      "hash": "dede75a21306b65974ecd8f87114ff6970f09fb794157a4ca09ab25c888c2bfc",
+      "size": 35140
+    },
+    {
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm-commons/9.10.1/asm-commons-9.10.1.jar",
+      "path": "org/ow2/asm/asm-commons/9.10.1/asm-commons-9.10.1.jar",
+      "algorithm": "SHA256",
+      "hash": "6d0abefb7cbf972ea16edb37ec14835372505063a45f976ab7ea889ed9497895",
+      "size": 74840
+    },
+    {
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm-tree/9.10.1/asm-tree-9.10.1.jar",
+      "path": "org/ow2/asm/asm-tree/9.10.1/asm-tree-9.10.1.jar",
+      "algorithm": "SHA256",
+      "hash": "3dfb0d5b6a106cd40b5b250e39935fbf2f927f4477546a5369a3ac609cf0506b",
+      "size": 51958
+    },
+    {
+      "url": "https://maven.fabricmc.net/org/ow2/asm/asm-util/9.10.1/asm-util-9.10.1.jar",
+      "path": "org/ow2/asm/asm-util/9.10.1/asm-util-9.10.1.jar",
+      "algorithm": "SHA256",
+      "hash": "1bb99d091fba2597dc6d51193e9bbcf0d8447e7ed96bd8f0198b18152f09655c",
+      "size": 95628
+    },
+    {
+      "url": "https://maven.fabricmc.net/net/fabricmc/sponge-mixin/0.17.5\u002Bmixin.0.8.7/sponge-mixin-0.17.5\u002Bmixin.0.8.7.jar",
+      "path": "net/fabricmc/sponge-mixin/0.17.5\u002Bmixin.0.8.7/sponge-mixin-0.17.5\u002Bmixin.0.8.7.jar",
+      "algorithm": "SHA256",
+      "hash": "03f0065023bfc3045d71bfb99872451d9ad5a0800a5a0dac34ab8c7d5c134f5d",
+      "size": 1551593
+    },
+    {
+      "url": "https://maven.fabricmc.net/net/fabricmc/fabric-loader/0.20.1/fabric-loader-0.20.1.jar",
+      "path": "net/fabricmc/fabric-loader/0.20.1/fabric-loader-0.20.1.jar",
+      "algorithm": "SHA256",
+      "hash": "d0c5a082e07410aaff9de7ab196aa6b4236002870f9ba3ad5c1260fcce5110ad",
+      "size": 1988880
+    }
+  ],
+  "javaMajor": 25,
+  "javaArchive": {
+    "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jre_x64_windows_hotspot_25.0.5_8.zip",
+    "path": "java.zip",
+    "algorithm": "SHA256",
+    "hash": "da78d54a2fcdbba1e92d5e3f07dd30236f96297891c4a21a781c3f38f5c0beae",
+    "size": 58589419
+  },
+  "mods": [
+    {
+      "url": "https://cdn.modrinth.com/data/5ZwdcRci/versions/3MP9UR23/ImmediatelyFast-Fabric-1.17.1%2B26.3.jar",
+      "path": "ImmediatelyFast-Fabric-1.17.1\u002B26.3.jar",
+      "algorithm": "SHA512",
+      "hash": "8e139589fd995bce3d485a34d92a07243964212f7ed2e4fc2f6de5b9a74d0f59b03252e7ce40c64e006cf3e21bed5de27b830d33ef048b286e041f6178ad8428",
+      "size": 99586
+    },
+    {
+      "url": "https://cdn.modrinth.com/data/9s6osm5g/versions/fg2uyxOW/cloth-config-fabric-26.3.159.jar",
+      "path": "cloth-config-fabric-26.3.159.jar",
+      "algorithm": "SHA512",
+      "hash": "8924e19d41845096724fa10f3717bc51964a0edbbbcad0ff1e6c6187a398b08f356e49579a657c2dc44a7f92e3850771f3ca70bf8c1f654de60425163b91dbb1",
+      "size": 1135009
+    },
+    {
+      "url": "https://cdn.modrinth.com/data/AANobbMI/versions/bAZQdGpg/sodium-fabric-0.9.2%2Bmc26.3.jar",
+      "path": "sodium-fabric-0.9.2\u002Bmc26.3.jar",
+      "algorithm": "SHA512",
+      "hash": "f3f260f204b8ce5e8777c2c73f537956755ec61f3817b0b78b5e5568e8aa40f14891f146475075109747665c7c88a45ca0ca9a8df3c68d79c58ecdaa8d8c4b93",
+      "size": 1908068
+    },
+    {
+      "url": "https://cdn.modrinth.com/data/NNAgCjsB/versions/X1g3VhTx/entityculling-fabric-1.11.3-mc26.3.jar",
+      "path": "entityculling-fabric-1.11.3-mc26.3.jar",
+      "algorithm": "SHA512",
+      "hash": "b6209bb62d72376d3fd284da137ec93a6dd38ebe5fd38ab9190deeade68b5b7f4bf915f4abcb4a807afe18cb9f0b59e11be789d46df6f0e6f64388ed2edc284d",
+      "size": 1508547
+    },
+    {
+      "url": "https://cdn.modrinth.com/data/P7dR8mSH/versions/Zns5SSRA/fabric-api-0.166.2%2B26.3.jar",
+      "path": "fabric-api-0.166.2\u002B26.3.jar",
+      "algorithm": "SHA512",
+      "hash": "fb686a9fa923248328107a12498229d6951e316257f18b7d0e4cbd6885ba447ed50a44076a8a5ba47cfe2043b329db3587ab000aeab1face26b2587a5d4ba6b5",
+      "size": 1797523
+    },
+    {
+      "url": "https://cdn.modrinth.com/data/wdLuzzEP/versions/k6ywOirE/Gamma-Utils-Fabric-3.2.2%2Bmc26.3.jar",
+      "path": "Gamma-Utils-Fabric-3.2.2\u002Bmc26.3.jar",
+      "algorithm": "SHA512",
+      "hash": "6cc6029537b7741af1c7b36a9f44e22bf379c4851c4d44918acc24d2d74009d4739eb1a1296078ac2b8d3d9430083b9452a168059d3ca090394656adbad02575",
+      "size": 103107
+    }
+  ],
+  "server": "45.58.126.18:25609"
+}

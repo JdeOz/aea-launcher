@@ -1,0 +1,9 @@
+{
+  "packId": "aea-survival",
+  "version": "0.1.0",
+  "name": "Aea Survival",
+  "minecraft": "26.3",
+  "fabric": "0.20.1",
+  "mods": ["sodium", "immediatelyfast", "entityculling", "gamma-utils"],
+  "server": "45.58.126.18:25609"
+}
