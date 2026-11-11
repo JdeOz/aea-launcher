@@ -176,12 +176,37 @@ AsyncTest("valid Xbox and Minecraft profile yield session in memory; missing Jav
         if (host == "user.auth.xboxlive.com") return JsonResponse("{\"Token\":\"xbl\"}");
         if (host == "xsts.auth.xboxlive.com") return JsonResponse("{\"Token\":\"xsts\",\"DisplayClaims\":{\"xui\":[{\"uhs\":\"hash\"}]}}");
         if (request.RequestUri.AbsolutePath.Contains("login_with_xbox", StringComparison.Ordinal)) return JsonResponse("{\"access_token\":\"minecraft-test-token\"}");
+        if (request.RequestUri.AbsolutePath == "/entitlements/license") return JsonResponse("{\"items\":[{\"name\":\"game_minecraft\"}]}");
         return owns ? JsonResponse("{\"name\":\"Player\",\"id\":\"0123456789abcdef0123456789abcdef\"}") : new(HttpStatusCode.NotFound);
     }));
     Check.Equal("Player", (await account.ExchangeMinecraft("test", null, CancellationToken.None)).Name);
     owns = false;
     var error = await Check.ThrowsAsync<LauncherException>(() => account.ExchangeMinecraft("test", null, CancellationToken.None));
     Check.Equal(404, error.Status);
+});
+
+AsyncTest("a retained Java profile cannot bypass missing or unavailable license verification", async () =>
+{
+    bool unavailable = false;
+    bool profileRequested = false;
+    using var account = new MicrosoftAccount(new AppStorage(NewRoot()), "", new FakeHttp(request =>
+    {
+        string host = request.RequestUri!.Host;
+        if (host == "user.auth.xboxlive.com") return JsonResponse("{\"Token\":\"xbl\"}");
+        if (host == "xsts.auth.xboxlive.com") return JsonResponse("{\"Token\":\"xsts\",\"DisplayClaims\":{\"xui\":[{\"uhs\":\"hash\"}]}}");
+        if (request.RequestUri.AbsolutePath.Contains("login_with_xbox", StringComparison.Ordinal)) return JsonResponse("{\"access_token\":\"test\"}");
+        if (request.RequestUri.AbsolutePath == "/entitlements/license")
+            return unavailable ? new(HttpStatusCode.ServiceUnavailable) : JsonResponse("{\"items\":[]}");
+        profileRequested = true;
+        return JsonResponse("{\"name\":\"Player\",\"id\":\"0123456789abcdef0123456789abcdef\"}");
+    }));
+    var absent = await Check.ThrowsAsync<LauncherException>(() => account.ExchangeMinecraft("test", null, CancellationToken.None));
+    Check.Equal("Licencia Minecraft", absent.Stage);
+    Check.True(!profileRequested);
+    unavailable = true;
+    var failure = await Check.ThrowsAsync<LauncherException>(() => account.ExchangeMinecraft("test", null, CancellationToken.None));
+    Check.Equal(503, failure.Status);
+    Check.True(!profileRequested);
 });
 
 Test("game rule evaluation excludes other platforms, demo and unsupported feature flags", () =>

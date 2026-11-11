@@ -17,3 +17,4 @@
 - [x] T011a Single-exe build scripts/admin export/check workflow/docs (FR001, FR011-012, SC005).
 - [ ] T011b Remove unused old project/data: automatic approval rejected the deletion; no files removed.
 - [ ] T012 External acceptance: own approved app, real login and game (SC004; blocked externally).
+- [x] T013 Require active Java entitlement before accepting profile; regression for absent/unavailable license (FR004).

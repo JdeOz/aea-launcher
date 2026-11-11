@@ -4,6 +4,9 @@ Launcher Windows x64 escrito desde cero en C#/.NET10 y WPF. No contiene Helios, 
 Node ni assets/configuración/perfiles importados del prototipo anterior. Interfaz mínima,
 sin logos ni ilustraciones: cuenta, RAM máxima y Jugar/Actualizar.
 
+Proyecto independiente, no oficial ni afiliado con Mojang o Microsoft. Los archivos del
+juego se descargan de los proveedores oficiales; el ejecutable no incluye una copia del juego.
+
 ## Estado real
 
 La aplicación Microsoft y el canal de actualizaciones están deliberadamente sin configurar.
@@ -89,7 +92,7 @@ Las versiones del launcher y del pack son independientes. Cambiar el programa re
   de mover. Bibliotecas y Java por hash; releases por digest; puntero activo atómico.
 - Los mundos y opciones no se reemplazan. Mods administrados se cargan desde la release
   con `fabric.addMods`; al retirarlos del pack ya no se incluyen en el arranque.
-- Autorización/perfil Minecraft se comprueban antes de cada arranque; una cuenta guardada
+- Autorización, licencia activa de Java y perfil se comprueban antes de cada arranque; una cuenta guardada
   no sustituye esa comprobación. No se borran sesiones por un fallo de red.
 - Diagnósticos con etapa/tipo/estado HTTP; sin cuerpos HTTP, tokens, nombres, correos ni
   argumentos de lanzamiento. Minecraft mantiene sus propios logs en la instancia.

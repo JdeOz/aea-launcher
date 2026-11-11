@@ -22,7 +22,8 @@ support logs retain only stages, safe error codes and timestamps.
 - FR-001: Windows x64 executable runs without an installer or separately installed launcher runtime.
 - FR-002: Minimal keyboard-accessible UI, no artwork, only account, RAM and primary action.
 - FR-003: Real Microsoft login using system browser; persistent sessions encrypted for this user.
-- FR-004: Xbox/Minecraft auth and profile required before launch; expired sessions renewed.
+- FR-004: Xbox/Minecraft auth, active Java entitlement and profile required before launch;
+  expired sessions renewed. Missing/unavailable entitlement never enables gameplay.
 - FR-005: Install correct Java, official game assets/libraries, Fabric and required mods automatically.
 - FR-006: Signed, versioned pack metadata; HTTPS and per-file hashes. Reject invalid signatures,
   unsupported schema, unsafe paths, conflicting files and downgrade attempts.

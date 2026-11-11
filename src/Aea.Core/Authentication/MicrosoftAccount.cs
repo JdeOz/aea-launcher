@@ -115,6 +115,18 @@ public sealed class MicrosoftAccount : IDisposable
             identityToken = "XBL3.0 x=" + uhs + ";" + xsts.RootElement.GetProperty("Token").GetString()
         }, "Minecraft", ct);
         string token = minecraft.RootElement.GetProperty("access_token").GetString()!;
+        progress?.Report("Comprobando la licencia de Minecraft Java…");
+        using (var licenseRequest = new HttpRequestMessage(HttpMethod.Get,
+                   "https://api.minecraftservices.com/entitlements/license?requestId=" + Guid.NewGuid().ToString("D")))
+        {
+            licenseRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            using var licenseResponse = await client.SendAsync(licenseRequest, ct);
+            await RequireSuccess(licenseResponse, "Licencia Minecraft", ct);
+            using var license = await ReadJson(licenseResponse, ct);
+            if (!license.RootElement.TryGetProperty("items", out var items) || items.ValueKind != JsonValueKind.Array ||
+                !items.EnumerateArray().Any(item => item.TryGetProperty("name", out var name) && name.GetString() == "game_minecraft"))
+                throw new LauncherException("Licencia Minecraft", "Minecraft no confirmó una licencia activa para jugar Java. Comprueba la compra o tu suscripción de Game Pass.");
+        }
         using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.minecraftservices.com/minecraft/profile");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         using var response = await client.SendAsync(request, ct);
@@ -126,7 +138,7 @@ public sealed class MicrosoftAccount : IDisposable
         string uuid = profile.RootElement.GetProperty("id").GetString()!;
         if (!System.Text.RegularExpressions.Regex.IsMatch(name, "^[a-zA-Z0-9_]{1,16}$") || !Guid.TryParseExact(uuid, "N", out _))
             throw new LauncherException("Minecraft", "Minecraft devolvió un perfil inválido.");
-        // A successful authenticated Java profile is required; no demo/offline account is constructed.
+        // Both an active Java entitlement and an authenticated profile are required; no offline account is constructed.
         return new(name, uuid, token, xuid, clientId);
     }
 

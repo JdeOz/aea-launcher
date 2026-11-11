@@ -3,9 +3,11 @@
 ## Resultado
 
 - .NET10.0.404, Release build: cero advertencias y cero errores.
-- 16/16 escenarios de regresión pasan. Firmas alteradas, claves ajenas, rutas Windows,
+- 17/17 escenarios de regresión pasan. Firmas alteradas, claves ajenas, rutas Windows,
   zip slip/enlaces/duplicados, hashes corruptos, cancelación, feed incorrecto, downgrade,
   permisos de Minecraft, sesión dañada, RAM, preservación de mundos y actualización exitosa.
+  La autenticación requiere licencia activa game_minecraft además del perfil de Java; una
+  licencia ausente o un servicio de licencias no disponible bloquean el arranque.
 - Auditoría NuGet de los cuatro proyectos, incluidas dependencias transitivas: ninguna
   vulnerabilidad conocida reportada. No constituye una auditoría independiente de seguridad.
 - Interfaz del exe final: abre, persiste RAM y presenta un error reintentable. Capturas en

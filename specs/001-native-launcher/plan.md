@@ -28,7 +28,8 @@ bound. Active JSON pointer replaced only after complete preparation; game direct
 JAR libraries/assets are content-addressed; native files extracted into versioned slot.
 Fabric mods use fabric.addMods from slot; managed updates never write personal game files.
 MSAL loopback/system browser + PKCE; encrypted cache handles offline refresh. Xbox/MC tokens
-memory only. Launch creates ProcessStartInfo.ArgumentList, never shell command text.
+memory only. An active game_minecraft entitlement and valid Java profile are both required.
+Launch creates ProcessStartInfo.ArgumentList, never shell command text.
 UI async with cancellation and exclusive operation gate; single instance per profile.
 
 ## Verification
