@@ -11,6 +11,8 @@ Player opens one executable, signs in and selects Play. Required runtime, game a
 downloaded and verified automatically. An authenticated, owned game launches in its own folder.
 Acceptance: on a clean profile preparation completes without manual dependency installation;
 missing account or app approval never launches a game or reports success.
+The game opens its normal title screen. The player chooses Multiplayer and the saved
+server; the launcher never automatically joins a server.
 ### US2 - Receive a pack update (P1)
 Opening detects a newer signed pack. Update replaces Play until explicitly selected. Successful
 installation returns to Play; a failed/cancelled update preserves the active release and saves.

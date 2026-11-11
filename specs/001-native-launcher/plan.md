@@ -31,6 +31,8 @@ MSAL loopback/system browser + PKCE; encrypted cache handles offline refresh. Xb
 memory only. An active game_minecraft entitlement and valid Java profile are both required.
 Launch creates ProcessStartInfo.ArgumentList, never shell command text.
 UI async with cancellation and exclusive operation gate; single instance per profile.
+The normal title screen is preserved. A first-run NBT server entry is written only when
+servers.dat is absent; launch arguments contain no Quick Play autojoin flags.
 
 ## Verification
 Security regression harness; real metadata/preparation smoke; WPF renders screenshot from its

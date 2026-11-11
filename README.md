@@ -9,14 +9,23 @@ juego se descargan de los proveedores oficiales; el ejecutable no incluye una co
 
 ## Estado real
 
-La aplicación Microsoft y el canal de actualizaciones están deliberadamente sin configurar.
-No se ha probado una sesión real ni el arranque autenticado: requieren Client ID propio con
-redirección de escritorio y aprobación de Minecraft. El programa explica esa situación y
-no construye cuentas offline ni usa identidades de otros launchers.
+Versión preliminar `0.1.0-preview.1` para Windows x64. Descarga el ejecutable portátil
+en [Releases](https://github.com/JdeOz/aea-launcher/releases). Todavía no está lista para
+distribuir como versión final a jugadores: el acceso a Minecraft está pendiente de aprobación.
+
+La aplicación Microsoft propia ya está registrada y conectada. Una prueba real completó
+Microsoft, Xbox Live y XSTS; Minecraft devolvió HTTP403. La solicitud de revisión de AppID
+fue enviada el 11 de noviembre de 2026. No se ha verificado una partida autenticada ni la
+renovación real de sesión. El programa no construye cuentas offline ni usa identidades ajenas.
+El canal remoto de actualizaciones de packs sigue sin configurar.
 
 Los tests de autenticación usan respuestas simuladas. La preparación real verifica Java,
 metadatos oficiales, bibliotecas, recursos, mods y carga de la clase principal con Java
 `--dry-run`; esa comprobación no ejecuta el juego ni prueba una cuenta.
+
+Al jugar se abre el menú normal de Minecraft. La dirección del servidor del pack se añade
+a la lista inicial para que el jugador entre desde Multijugador; no hay conexión automática.
+El pack de ejemplo contiene la dirección pública de Aea Survival en `pack.json`.
 
 ## Ejecutable
 
@@ -60,7 +69,7 @@ Minecraft. Logs y resultados están en la carpeta que imprime el script.
 ```
 
 Ni el Client ID ni la clave pública son secretos. La clave privada de firma no se distribuye.
-La solicitud externa y la publicación no forman parte de los scripts ni se han realizado.
+La solicitud externa y la publicación en GitHub no forman parte de estos scripts.
 
 ## Publicar cambios de mods
 

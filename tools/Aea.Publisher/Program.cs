@@ -13,6 +13,23 @@ static class Publisher
     {
         try
         {
+            if (args.Length == 3 && args[0] == "account-check")
+            {
+                var storage = new AppStorage(args[2]);
+                using var account = new Aea.Core.Authentication.MicrosoftAccount(storage, args[1]);
+                try
+                {
+                    _ = await account.SignIn(false, new Progress<string>(Console.WriteLine), CancellationToken.None);
+                    Console.WriteLine("Microsoft, Xbox, licencia y perfil Java verificados. No se abrió el juego.");
+                    return 0;
+                }
+                catch (LauncherException error)
+                {
+                    new Diagnostics(storage).Failure(error);
+                    Console.Error.WriteLine($"stage={error.Stage}; http={error.Status}; {error.Message}");
+                    return 1;
+                }
+            }
             if (args.Length == 2 && args[0] == "keygen")
             {
                 string path = Path.GetFullPath(args[1]);
@@ -64,7 +81,7 @@ static class Publisher
                 Console.WriteLine($"Preparación y Java dry-run verificados. Minecraft {prepared.Release.Pack.Minecraft}, {prepared.Classpath.Length} bibliotecas. No se ejecutó el juego ni una sesión autenticada.");
                 return 0;
             }
-            Console.Error.WriteLine("keygen <clave-cifrada> | pack <pack.json> <clave-cifrada> <salida> | prepare <release.json> <public.pem> <datos>");
+            Console.Error.WriteLine("keygen <clave-cifrada> | pack <pack.json> <clave-cifrada> <salida> | prepare <release.json> <public.pem> <datos> | account-check <client-id> <datos> (sesión ya guardada; cerrar Aea primero)");
             return 2;
         }
         catch (Exception error)

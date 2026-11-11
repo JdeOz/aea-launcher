@@ -47,10 +47,6 @@ public static class GameLaunch
         arguments.AddRange(GameRules.Arguments(gameArguments.GetProperty("game"), values));
         if (prepared.Loader.TryGetProperty("arguments", out loaderArgs) && loaderArgs.TryGetProperty("game", out var extra))
             arguments.AddRange(GameRules.Arguments(extra, values));
-        if (pack.Server != null)
-        {
-            arguments.AddRange(["--quickPlayPath", Path.Combine(prepared.GameDirectory, "quickplay.json"), "--quickPlayMultiplayer", pack.Server]);
-        }
         var start = new ProcessStartInfo(prepared.JavaExecutable)
         {
             WorkingDirectory = prepared.GameDirectory,
@@ -70,6 +66,7 @@ public static class GameLaunch
         string options = Path.Combine(prepared.GameDirectory, "options.txt");
         if (!File.Exists(options)) AppStorage.AtomicWrite(options, Encoding.UTF8.GetBytes("lang:es_es\nrenderDistance:12\nsimulationDistance:8\n"));
         AppStorage.RejectLinks(options);
+        InitialServerList.Ensure(prepared.GameDirectory, prepared.Release.Pack.Name, prepared.Release.Pack.Server);
         return Process.Start(Build(prepared, account, ramMb)) ?? throw new LauncherException("Minecraft", "Windows no pudo iniciar Java.");
     }
 }

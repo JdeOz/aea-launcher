@@ -24,6 +24,7 @@ public sealed class MicrosoftAccount : IDisposable
     {
         this.clientId = clientId;
         client = new(handler ?? new HttpClientHandler { AllowAutoRedirect = false }) { Timeout = TimeSpan.FromSeconds(45) };
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         cacheFile = Path.Combine(storage.Auth, "microsoft.bin");
         application = CreateApplication();
     }
@@ -122,7 +123,7 @@ public sealed class MicrosoftAccount : IDisposable
             licenseRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             using var licenseResponse = await client.SendAsync(licenseRequest, ct);
             await RequireSuccess(licenseResponse, "Licencia Minecraft", ct);
-            using var license = await ReadJson(licenseResponse, ct);
+            using var license = await ReadJson(licenseResponse, ct, "Licencia Minecraft");
             if (!license.RootElement.TryGetProperty("items", out var items) || items.ValueKind != JsonValueKind.Array ||
                 !items.EnumerateArray().Any(item => item.TryGetProperty("name", out var name) && name.GetString() == "game_minecraft"))
                 throw new LauncherException("Licencia Minecraft", "Minecraft no confirmó una licencia activa para jugar Java. Comprueba la compra o tu suscripción de Game Pass.");
@@ -133,7 +134,7 @@ public sealed class MicrosoftAccount : IDisposable
         if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             throw new LauncherException("Minecraft", "Esta cuenta no tiene un perfil de Minecraft Java disponible. Comprueba la compra o Game Pass y crea el perfil en minecraft.net.", 404);
         await RequireSuccess(response, "Perfil Minecraft", ct);
-        using var profile = await ReadJson(response, ct);
+        using var profile = await ReadJson(response, ct, "Perfil Minecraft");
         string name = profile.RootElement.GetProperty("name").GetString()!;
         string uuid = profile.RootElement.GetProperty("id").GetString()!;
         if (!System.Text.RegularExpressions.Regex.IsMatch(name, "^[a-zA-Z0-9_]{1,16}$") || !Guid.TryParseExact(uuid, "N", out _))
@@ -144,9 +145,10 @@ public sealed class MicrosoftAccount : IDisposable
 
     private async Task<JsonDocument> Post(string url, object body, string stage, CancellationToken ct)
     {
-        using var response = await client.PostAsJsonAsync(url, body, ct);
+        // Xbox's wire protocol uses PascalCase. The web defaults silently camel-case anonymous DTOs.
+        using var response = await client.PostAsJsonAsync(url, body, new JsonSerializerOptions(), ct);
         await RequireSuccess(response, stage, ct);
-        return await ReadJson(response, ct);
+        return await ReadJson(response, ct, stage);
     }
 
     private static async Task RequireSuccess(HttpResponseMessage response, string stage, CancellationToken ct)
@@ -157,7 +159,7 @@ public sealed class MicrosoftAccount : IDisposable
             throw new LauncherException(stage, "Minecraft rechazó el acceso de este launcher (HTTP 403). El administrador debe comprobar el registro y la aprobación de la aplicación; reintentar no concede permisos.", status);
         if (stage == "Xbox")
         {
-            using var body = await ReadJson(response, ct);
+            using var body = await ReadJson(response, ct, stage);
             long code = body.RootElement.TryGetProperty("XErr", out var xerr) ? xerr.GetInt64() : 0;
             string message = code switch
             {
@@ -171,7 +173,7 @@ public sealed class MicrosoftAccount : IDisposable
         throw new LauncherException(stage, $"{stage} rechazó el acceso (HTTP {status}). Inicia sesión de nuevo o revisa la configuración de la aplicación.", status);
     }
 
-    private static async Task<JsonDocument> ReadJson(HttpResponseMessage response, CancellationToken ct)
+    private static async Task<JsonDocument> ReadJson(HttpResponseMessage response, CancellationToken ct, string stage)
     {
         await using var stream = await response.Content.ReadAsStreamAsync(ct);
         using var memory = new MemoryStream();
@@ -179,11 +181,11 @@ public sealed class MicrosoftAccount : IDisposable
         int count;
         while ((count = await stream.ReadAsync(buffer, ct)) > 0)
         {
-            if (memory.Length + count > 1024 * 1024) throw new LauncherException("Cuenta", "Respuesta de autenticación demasiado grande.");
+            if (memory.Length + count > 1024 * 1024) throw new LauncherException(stage, "Respuesta de autenticación demasiado grande.");
             memory.Write(buffer, 0, count);
         }
         try { return JsonDocument.Parse(memory.ToArray()); }
-        catch (JsonException) { throw new LauncherException("Cuenta", "El servicio de autenticación devolvió una respuesta no válida."); }
+        catch (JsonException) { throw new LauncherException(stage, $"{stage} no devolvió el formato JSON esperado (HTTP {(int)response.StatusCode}). Puedes reintentar; si persiste, revisa launcher.log.", (int)response.StatusCode); }
     }
 
     public Task SignOut()

@@ -167,6 +167,26 @@ AsyncTest("Minecraft403 is actionable and does not create a local account", asyn
     Check.Equal(0, Directory.GetFiles(storage.Auth).Length);
 });
 
+AsyncTest("Xbox requests preserve protocol field casing and request JSON responses", async () =>
+{
+    using var account = new MicrosoftAccount(new AppStorage(NewRoot()), "", new FakeHttp(request =>
+    {
+        Check.True(request.Headers.Accept.Any(header => header.MediaType == "application/json"));
+        if (request.RequestUri!.Host is "user.auth.xboxlive.com" or "xsts.auth.xboxlive.com")
+        {
+            using var body = JsonDocument.Parse(request.Content!.ReadAsStringAsync().GetAwaiter().GetResult());
+            Check.True(body.RootElement.TryGetProperty("Properties", out _));
+            Check.True(body.RootElement.TryGetProperty("RelyingParty", out _));
+            Check.True(body.RootElement.TryGetProperty("TokenType", out _));
+        }
+        if (request.RequestUri.Host == "user.auth.xboxlive.com") return JsonResponse("{\"Token\":\"xbl\"}");
+        if (request.RequestUri.Host == "xsts.auth.xboxlive.com") return JsonResponse("{\"Token\":\"xsts\",\"DisplayClaims\":{\"xui\":[{\"uhs\":\"hash\"}]}}");
+        return new(HttpStatusCode.Forbidden);
+    }));
+    var denied = await Check.ThrowsAsync<LauncherException>(() => account.ExchangeMinecraft("test", null, CancellationToken.None));
+    Check.Equal(403, denied.Status);
+});
+
 AsyncTest("valid Xbox and Minecraft profile yield session in memory; missing Java ownership is refused", async () =>
 {
     bool owns = true;
@@ -301,6 +321,33 @@ AsyncTest("successful update activates only after verification, preserves worlds
     Check.True(!launch.ArgumentList.Any(value => value.Contains("fabric.addMods", StringComparison.Ordinal)));
     Check.Equal("fixture-token", launch.ArgumentList[^1]);
     Check.Throws<LauncherException>(() => GameLaunch.Build(updated, new("Player", Guid.Empty.ToString("N"), "", "", ""), 2048));
+    var withServer = updated with { Release = Release(pack with { Server = "play.example.com:25565" }) };
+    Check.True(!GameLaunch.Build(withServer, new("Player", Guid.Empty.ToString("N"), "fixture-token", "", ""), 2048)
+        .ArgumentList.Any(value => value.Contains("quickPlay", StringComparison.Ordinal)));
+});
+
+Test("default server entry uses Java NBT and preserves the player's existing list", () =>
+{
+    string directory = NewRoot(); Directory.CreateDirectory(directory);
+    InitialServerList.Ensure(directory, "Aea", "play.example.com:25565");
+    byte[] actual = File.ReadAllBytes(Path.Combine(directory, "servers.dat"));
+    // Independent NBT reader for this fixture: compound root, list<compound>, two strings, end/end.
+    using var input = new MemoryStream(actual);
+    int Byte() => input.ReadByte();
+    string Text()
+    {
+        int size = Byte() * 256 + Byte();
+        byte[] text = new byte[size]; input.ReadExactly(text);
+        return Encoding.UTF8.GetString(text);
+    }
+    Check.Equal(10, Byte()); Check.Equal("", Text());
+    Check.Equal(9, Byte()); Check.Equal("servers", Text()); Check.Equal(10, Byte());
+    Check.True(new[] { Byte(), Byte(), Byte(), Byte() }.SequenceEqual(new[] { 0, 0, 0, 1 }));
+    Check.Equal(8, Byte()); Check.Equal("name", Text()); Check.Equal("Aea", Text());
+    Check.Equal(8, Byte()); Check.Equal("ip", Text()); Check.Equal("play.example.com:25565", Text());
+    Check.Equal(0, Byte()); Check.Equal(0, Byte()); Check.Equal(-1, Byte());
+    InitialServerList.Ensure(directory, "Changed", "different.example.com");
+    Check.True(File.ReadAllBytes(Path.Combine(directory, "servers.dat")).SequenceEqual(actual));
 });
 
 int failures = 0;

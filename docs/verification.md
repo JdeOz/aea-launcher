@@ -3,15 +3,17 @@
 ## Resultado
 
 - .NET10.0.404, Release build: cero advertencias y cero errores.
-- 17/17 escenarios de regresión pasan. Firmas alteradas, claves ajenas, rutas Windows,
+- 19/19 escenarios de regresión pasan. Firmas alteradas, claves ajenas, rutas Windows,
   zip slip/enlaces/duplicados, hashes corruptos, cancelación, feed incorrecto, downgrade,
   permisos de Minecraft, sesión dañada, RAM, preservación de mundos y actualización exitosa.
   La autenticación requiere licencia activa game_minecraft además del perfil de Java; una
   licencia ausente o un servicio de licencias no disponible bloquean el arranque.
+- Regresiones adicionales comprueban el formato JSON de Xbox y la lista NBT inicial de
+  servidores, sin reemplazar listas existentes ni añadir argumentos de conexión automática.
 - Auditoría NuGet de los cuatro proyectos, incluidas dependencias transitivas: ninguna
   vulnerabilidad conocida reportada. No constituye una auditoría independiente de seguridad.
 - Interfaz del exe final: abre, persiste RAM y presenta un error reintentable. Capturas en
-  artifacts/smoke-9347c2a23bab4aa2a85f5ebdeb25e094. El HTTP403 de esa prueba es simulado.
+  la carpeta `artifacts/smoke-*` indicada por cada compilación. El HTTP403 de esa prueba es simulado.
 - Copia de solo Aea.exe en una carpeta con espacios: smoke pasa con DOTNET_ROOT apuntando
   a una carpeta inexistente; sin archivos DLL o recursos vecinos.
 - Preparación real nueva: Java25, Minecraft26.3, Fabric0.20.1, 82 bibliotecas, 5149 recursos,
@@ -21,17 +23,17 @@
 
 ## Límites pendientes
 
-- brand.json no tiene Client ID ni canal remoto. No se reutiliza la configuración de Helios.
-- MSAL/Minecraft real, renovación de sesión real y partida autenticada no verificados.
-- Aprobación de Microsoft no solicitada para el proyecto nuevo; depende del proveedor.
-- No se publicó el código, la página, un pack ni el workflow. La lógica de feed/update fue
-  probada con respuestas simuladas y artefactos de prueba; falta una publicación real.
+- La aplicación Microsoft propia está registrada y `brand.json` contiene su Client ID público.
+  El canal remoto de packs sigue vacío. No se reutiliza la configuración de Helios.
+- Prueba real de cuenta: Microsoft, Xbox Live y XSTS completados; Minecraft devolvió HTTP403.
+  Minecraft real, renovación de sesión real y partida autenticada siguen sin verificar.
+- Solicitud de aprobación de AppID enviada y confirmada el 11 de noviembre de 2026.
+  La aprobación depende del proveedor y no está concedida todavía.
+- La lógica de feed/update fue probada con respuestas simuladas y artefactos de prueba;
+  falta un canal real de packs. La publicación del ejecutable no habilita ese canal.
 - No se dispone de una segunda PC limpia para validar el binario en otro Windows.
 - El exe no tiene firma Authenticode. Windows puede mostrar editor desconocido.
-- El servidor permaneció apagado y no se modificó durante esta tarea.
-- La revisión automática rechazó borrar el proyecto antiguo `launcher` y sus datos locales
-  `.aeatenico` y `AeaTenico Launcher` de Roaming. Solo indicó bloqueo por política. Siguen en
-  disco, fuera de la solución nueva y sin referencias desde ella.
+- El servidor no se encendió ni se modificó durante la preparación de esta versión.
 
 ## Reproducir
 
